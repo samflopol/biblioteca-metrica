@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}— Catálogo{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>📖 Catálogo de Libros</h2>
+  <p class="text-muted">Consulta la disponibilidad del material bibliográfico</p>
+</div>
+
+<!-- Buscador RF-1 -->
+<form method="GET" class="mb-4">
+  <div class="input-group">
+    <input type="text" name="q" class="form-control" placeholder="Buscar por título o autor..."
+           value="{{ busqueda }}"/>
+    <button class="btn btn-primary" type="submit">🔍 Buscar</button>
+    {% if busqueda %}
+      <a href="{{ url_for('catalogo') }}" class="btn btn-outline-secondary">✕ Limpiar</a>
+    {% endif %}
+  </div>
+</form>
+
+{% if libros %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for libro in libros %}
+  <div class="col">
+    <div class="card libro-card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ libro.titulo }}</h5>
+        <p class="card-text text-muted">✍️ {{ libro.autor }}</p>
+        <span class="badge {% if libro.disponible %}bg-success{% else %}bg-danger{% endif %} mb-3">
+          {% if libro.disponible %}✅ Disponible{% else %}❌ Prestado{% endif %}
+        </span>
+      </div>
+      <div class="card-footer bg-transparent">
+        {% if libro.disponible %}
+          <form method="POST" action="{{ url_for('nuevo_prestamo', libro_id=libro.id) }}">
+            <button type="submit" class="btn btn-primary btn-sm w-100">
+              📥 Solicitar Préstamo
+            </button>
+          </form>
+        {% else %}
+          <button class="btn btn-secondary btn-sm w-100" disabled>No disponible</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <p style="font-size:3rem">📭</p>
+  <p>No se encontraron libros con "{{ busqueda }}"</p>
+</div>
+{% endif %}
+{% endblock %}

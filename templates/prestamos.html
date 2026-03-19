@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}— Préstamos Activos{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>📦 Préstamos Activos</h2>
+  <p class="text-muted">Gestiona los préstamos y devoluciones</p>
+</div>
+
+{% if prestamos %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Libro</th>
+        <th>Usuario</th>
+        <th>Fecha inicio</th>
+        <th>Devolución</th>
+        <th>Sanción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td><strong>{{ p.libro.titulo }}</strong></td>
+        <td>{{ p.usuario.nombre }}</td>
+        <td>{{ p.fecha_inicio }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('devolver', prestamo_id=p.id) }}" class="d-inline">
+            <button class="btn btn-success btn-sm">✅ Registrar devolución</button>
+          </form>
+        </td>
+        <td>
+          {% if p.sancion %}
+            <span class="badge bg-danger">{{ p.sancion }}</span>
+          {% else %}
+            <form method="POST" action="{{ url_for('registrar_sancion', prestamo_id=p.id) }}"
+                  class="d-flex gap-1">
+              <input type="text" name="motivo" class="form-control form-control-sm"
+                     placeholder="Motivo sanción"/>
+              <button class="btn btn-warning btn-sm">⚠️</button>
+            </form>
+          {% endif %}
+        </td>
+        <td>
+          <span class="badge bg-warning text-dark">activo</span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <p style="font-size:3rem">✅</p>
+  <p>No hay préstamos activos en este momento.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}— Gestionar Libros{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>🛠️ Gestionar Catálogo</h2>
+  <p class="text-muted">Agrega nuevos libros al sistema</p>
+</div>
+
+<div class="row g-4">
+  <!-- Formulario agregar libro -->
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header"><strong>➕ Nuevo Libro</strong></div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input type="text" name="titulo" class="form-control" required/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Autor</label>
+            <input type="text" name="autor" class="form-control" required/>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Agregar al catálogo</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de libros -->
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header"><strong>📚 Todos los libros ({{ libros|length }})</strong></div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for libro in libros %}
+            <tr>
+              <td>{{ libro.id }}</td>
+              <td>{{ libro.titulo }}</td>
+              <td>{{ libro.autor }}</td>
+              <td>
+                <span class="badge {% if libro.disponible %}bg-success{% else %}bg-danger{% endif %}">
+                  {% if libro.disponible %}Disponible{% else %}Prestado{% endif %}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

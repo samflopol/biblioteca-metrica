@@ -1,0 +1,47 @@
+# ─────────────────────────────────────────────────────────
+# Pipeline CI/CD — Sistema de Gestión de Biblioteca
+# Ing. Software 15A — Azure DevOps
+# ─────────────────────────────────────────────────────────
+
+trigger:
+  - main          # Se activa automáticamente con cada git push a main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+
+  # ── STAGE 1: BUILD ─────────────────────────────────────
+  - stage: Build
+    displayName: '📦 Instalación de dependencias'
+    jobs:
+      - job: InstalarDependencias
+        displayName: 'pip install'
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.11'
+            displayName: '🐍 Configurar Python 3.11'
+
+          - script: |
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+            displayName: '📥 Instalar librerías'
+
+  # ── STAGE 2: TEST ──────────────────────────────────────
+  - stage: Test
+    displayName: '🧪 Pruebas automáticas'
+    dependsOn: Build
+    jobs:
+      - job: EjecutarPruebas
+        displayName: 'pytest'
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.11'
+            displayName: '🐍 Configurar Python 3.11'
+
+          - script: |
+              pip install -r requirements.txt
+              pytest tests/ -v --tb=short
+            displayName: '✅ Correr tests con pytest'

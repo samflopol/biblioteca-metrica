@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}— Mi Historial{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>📋 Mi Historial de Préstamos</h2>
+  <p class="text-muted">Todos los libros que has solicitado</p>
+</div>
+
+{% if prestamos %}
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Libro</th>
+        <th>Autor</th>
+        <th>Fecha inicio</th>
+        <th>Fecha devolución</th>
+        <th>Estado</th>
+        <th>Sanción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td><strong>{{ p.libro.titulo }}</strong></td>
+        <td>{{ p.libro.autor }}</td>
+        <td>{{ p.fecha_inicio }}</td>
+        <td>{{ p.fecha_devolucion or '—' }}</td>
+        <td>
+          <span class="badge {% if p.estado == 'activo' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+            {{ p.estado }}
+          </span>
+        </td>
+        <td>
+          {% if p.sancion %}
+            <span class="badge bg-danger">⚠️ {{ p.sancion }}</span>
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <p style="font-size:3rem">📭</p>
+  <p>No tienes préstamos registrados aún.</p>
+  <a href="{{ url_for('catalogo') }}" class="btn btn-primary">Ver catálogo</a>
+</div>
+{% endif %}
+{% endblock %}
