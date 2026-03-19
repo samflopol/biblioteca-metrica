@@ -1,0 +1,6 @@
+crear_archivo:
+    image: alpine
+    script:
+    - echo "Crear archivo..."
+    - mkdir construir
+    - touch construir/requisitos.txt
