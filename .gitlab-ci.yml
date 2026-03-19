@@ -1,4 +1,4 @@
-çrear_archivo:
+crear_archivo:
     image: alpine
     script:
     - echo "Crear archivo..."
