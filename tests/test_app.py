@@ -11,8 +11,8 @@ def client():
     app.config['WTF_CSRF_ENABLED'] = False
 
     with app.app_context():
-        db.drop_all()
-        db.create_all()
+        db.drop_all()      
+        db.create_all()  
         # Usuario de prueba
         usuario = Usuario(
             nombre='Test User',

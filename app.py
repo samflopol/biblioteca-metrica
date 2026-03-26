@@ -17,6 +17,7 @@ def hash_password(password):
 # ── Inicializar BD con datos de prueba ────────────────────
 def init_db():
     with app.app_context():
+        db.drop_all()
         db.create_all()
         if not Usuario.query.first():
             admin = Usuario(nombre='Bibliotecario Admin', email='admin@biblioteca.com',
